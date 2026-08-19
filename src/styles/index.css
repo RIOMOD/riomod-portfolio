@@ -276,47 +276,56 @@ body {
 /* Magazine / Booklet Layout */
 .booklet-container {
   width: 100%;
-  max-width: 1360px;
+  max-width: 1600px;
   margin: 0 auto;
-  min-height: calc(100vh - 100px);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 1rem;
 }
 
 .booklet-spread {
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 100%;
-  min-height: 600px;
-  background: #0f1116;
+  background: #0c0e14;
   border: 1px solid var(--surface-border-strong);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95);
   position: relative;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .booklet-spread {
     grid-template-columns: 1fr;
-    min-height: auto;
+    height: auto !important;
+    max-height: 82vh;
+    overflow-y: auto;
   }
 }
 
 .booklet-page {
-  padding: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.25rem, 3.5vw, 3rem);
   position: relative;
-  border-right: 1px solid var(--surface-border);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow-y: auto;
 }
 
-.booklet-page:last-child {
-  border-right: none;
+.booklet-page::-webkit-scrollbar {
+  width: 4px;
+}
+.booklet-page::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.2);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .booklet-page {
+    padding: 1.25rem 1rem;
+  }
 }
 
 @media (max-width: 900px) {
