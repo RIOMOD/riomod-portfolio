@@ -1,0 +1,280 @@
+/* Editorial Dark 3D Portfolio Theme Design System */
+
+:root {
+  --bg-dark: #090a0d;
+  --bg-card: #12141a;
+  --bg-card-hover: #181b24;
+  --surface-border: rgba(255, 255, 255, 0.14);
+  --surface-border-strong: rgba(255, 255, 255, 0.35);
+  
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  
+  --accent-cyan: #00f0ff;
+  --accent-purple: #9d4edd;
+  --accent-gold: #ffb703;
+  
+  --font-display: 'Oswald', 'Space Grotesk', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-editorial: 'Syne', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  line-height: 1.6;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(9, 10, 13, 0.92), rgba(9, 10, 13, 0.98));
+  background-size: 32px 32px, 100% 100%;
+  background-attachment: fixed;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090a0d;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Typography Utility */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+/* Wireframe Editorial Frame (Mimicking the reference image) */
+.editorial-box {
+  border: 1px solid var(--surface-border-strong);
+  padding: 2.5rem;
+  position: relative;
+  background: rgba(18, 20, 26, 0.65);
+  backdrop-filter: blur(16px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editorial-box::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--text-primary);
+  border-left: 2px solid var(--text-primary);
+}
+
+.editorial-box::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid var(--text-primary);
+  border-right: 2px solid var(--text-primary);
+}
+
+/* Corner Index Number Badge */
+.page-number-tag {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  border-bottom: 1px solid var(--surface-border);
+  padding-bottom: 0.25rem;
+  display: inline-block;
+}
+
+/* Glassmorphism Cards */
+.glass-panel {
+  background: rgba(18, 20, 26, 0.6);
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(12px);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 3D Tilt Card Base */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* Glow effects */
+.glow-accent {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-accent {
+  color: var(--accent-cyan);
+}
+
+/* Navigation Header */
+.nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.25rem 2.5rem;
+  background: rgba(9, 10, 13, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--surface-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Magazine / Booklet Layout (Double Page Spread from reference image) */
+.booklet-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.booklet-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  min-height: 640px;
+  background: #0f1116;
+  border: 1px solid var(--surface-border-strong);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .booklet-spread {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booklet-page {
+  padding: 3rem;
+  position: relative;
+  border-right: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.booklet-page:last-child {
+  border-right: none;
+}
+
+/* Center Fold Shadow Effect for Magazine View */
+.booklet-spread::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 40px;
+  transform: translateX(-50%);
+  background: linear-gradient(to right, rgba(0,0,0,0.35), transparent 40%, transparent 60%, rgba(0,0,0,0.35));
+  pointer-events: none;
+}
+
+/* Buttons */
+.btn-editorial {
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--surface-border-strong);
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-editorial:hover {
+  background: #ffffff;
+  color: #090a0d;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.btn-accent {
+  background: var(--accent-cyan);
+  color: #090a0d;
+  font-weight: 700;
+  border: none;
+}
+
+.btn-accent:hover {
+  background: #ffffff;
+  color: #090a0d;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+}
+
+/* Category Filter Tags */
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  color: var(--text-muted);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.85rem;
+  font-family: var(--font-heading);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn.active, .filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: #fff;
+}
