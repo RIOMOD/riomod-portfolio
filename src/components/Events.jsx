@@ -79,7 +79,7 @@ export default function Events() {
         </div>
 
         <div style={{ marginBottom: '3rem' }}>
-          <h2 className="font-display" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <h2 className="font-display" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             EVENTS & ENGAGEMENT
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.5rem' }}>
@@ -133,7 +133,7 @@ export default function Events() {
                   </span>
                 </div>
 
-                <h3 className="font-display" style={{ fontSize: '1.35rem', color: '#fff', letterSpacing: '0.04em', marginBottom: '0.4rem', lineHeight: 1.3 }}>
+                <h3 className="font-display" style={{ fontSize: '1.35rem', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '0.4rem', lineHeight: 1.3 }}>
                   {ev.title}
                 </h3>
 
@@ -347,7 +347,7 @@ export default function Events() {
                   </span>
                 </div>
 
-                <h3 className="font-display" style={{ fontSize: 'clamp(1.3rem, 2.3vw, 1.8rem)', color: '#fff', lineHeight: 1.25, margin: 0 }}>
+                <h3 className="font-display" style={{ fontSize: 'clamp(1.3rem, 2.3vw, 1.8rem)', color: 'var(--text-primary)', lineHeight: 1.25, margin: 0 }}>
                   {selectedEvent.title}
                 </h3>
               </div>
@@ -607,7 +607,7 @@ export default function Events() {
                 <div>
                   
                   {/* Event Title & Sub Header */}
-                  <h2 className="font-display" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)', color: '#fff', lineHeight: 1.25, marginBottom: '0.5rem' }}>
+                  <h2 className="font-display" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)', color: 'var(--text-primary)', lineHeight: 1.25, marginBottom: '0.5rem' }}>
                     {selectedEvent.title}
                   </h2>
 
@@ -621,7 +621,7 @@ export default function Events() {
 
                   {/* Detailed Description */}
                   <div style={{ marginBottom: '2rem' }}>
-                    <h4 style={{ color: '#fff', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem' }}>
+                    <h4 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem' }}>
                       📝 MÔ TẢ & BỐI CẢNH SỰ KIỆN
                     </h4>
                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, fontSize: '0.92rem' }}>
@@ -632,13 +632,13 @@ export default function Events() {
                   {/* Key Highlights / Achievements */}
                   {selectedEvent.highlights && (
                     <div>
-                      <h4 style={{ color: '#fff', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <h4 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                         <Sparkles size={16} color="var(--accent-gold)" /> ĐIỂM NỔI BẬT & THÀNH TỰU ĐẠT ĐƯỢC
                       </h4>
 
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                         {selectedEvent.highlights.map((hl, hIdx) => (
-                          <div key={hIdx} style={{ background: 'rgba(255,255,255,0.02)', padding: '0.75rem 1rem', borderLeft: '3px solid var(--accent-gold)', fontSize: '0.88rem', color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <div key={hIdx} style={{ background: 'rgba(255,255,255,0.02)', padding: '0.75rem 1rem', borderLeft: '3px solid var(--accent-gold)', fontSize: '0.88rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                             <span style={{ color: 'var(--accent-gold)' }}>★</span>
                             <span>{hl}</span>
                           </div>
@@ -655,7 +655,7 @@ export default function Events() {
               <div style={{ borderTop: '1px solid var(--surface-border-strong)', paddingTop: '2rem', marginTop: '1rem' }}>
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                  <h4 style={{ color: '#fff', fontFamily: 'var(--font-heading)', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <h4 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Award size={18} color="var(--accent-cyan)" /> CÁC SỰ KIỆN KHÁC
                   </h4>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Bấm vào sự kiện bên dưới để chuyển xem chi tiết</span>

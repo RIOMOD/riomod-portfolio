@@ -25,7 +25,7 @@ export default function Certificates() {
         </div>
 
         <div style={{ marginBottom: '3rem' }}>
-          <h2 className="font-display" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <h2 className="font-display" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             QUALIFICATIONS & CERTIFICATIONS
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.5rem' }}>
@@ -68,7 +68,7 @@ export default function Certificates() {
                   </span>
                 </div>
 
-                <h3 className="font-display" style={{ fontSize: '1.3rem', color: '#fff', letterSpacing: '0.05em', marginBottom: '0.5rem', lineHeight: 1.3 }}>
+                <h3 className="font-display" style={{ fontSize: '1.3rem', color: 'var(--text-primary)', letterSpacing: '0.05em', marginBottom: '0.5rem', lineHeight: 1.3 }}>
                   {cert.title}
                 </h3>
 
@@ -237,7 +237,7 @@ export default function Certificates() {
                 [ VERIFIED CREDENTIAL DOCUMENT ]
               </span>
 
-              <h3 className="font-display" style={{ fontSize: '1.8rem', color: '#fff', marginTop: '0.5rem' }}>
+              <h3 className="font-display" style={{ fontSize: '1.8rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
                 {selectedCert.title}
               </h3>
 
@@ -250,7 +250,7 @@ export default function Certificates() {
               </div>
 
               <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderLeft: '3px solid var(--accent-cyan)', marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#fff', marginBottom: '0.25rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
                   <ShieldCheck size={16} color="var(--accent-cyan)" /> Mã xác thực (Credential ID): <strong>{selectedCert.credentialId}</strong>
                 </div>
                 {selectedCert.grade && (

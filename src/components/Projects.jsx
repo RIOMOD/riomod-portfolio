@@ -61,7 +61,7 @@ export default function Projects() {
         </div>
 
         <div style={{ marginBottom: '2.5rem' }}>
-          <h2 className="font-display" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <h2 className="font-display" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             PROJECT PORTFOLIO
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.5rem' }}>
@@ -253,7 +253,7 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    <h3 className="font-display" style={{ fontSize: '1.3rem', color: '#fff', letterSpacing: '0.04em', marginBottom: '0.35rem', lineHeight: 1.3 }}>
+                    <h3 className="font-display" style={{ fontSize: '1.3rem', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '0.35rem', lineHeight: 1.3 }}>
                       {project.title}
                     </h3>
 
@@ -376,7 +376,7 @@ export default function Projects() {
                     <span style={{ color: 'var(--text-dim)' }}>•</span>
                     <span style={{ color: 'var(--accent-cyan)', fontSize: '0.8rem', fontWeight: 600 }}>{selectedProject.category}</span>
                   </div>
-                  <h3 className="font-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', color: '#fff', letterSpacing: '0.04em', lineHeight: 1.2 }}>
+                  <h3 className="font-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', lineHeight: 1.2 }}>
                     {selectedProject.title}
                   </h3>
                 </div>
@@ -417,7 +417,7 @@ export default function Projects() {
                           key={idx} 
                           style={{
                             fontSize: '0.75rem',
-                            color: '#fff',
+                            color: 'var(--text-primary)',
                             background: 'rgba(255,255,255,0.06)',
                             padding: '0.25rem 0.65rem',
                             border: '1px solid var(--surface-border)',
@@ -461,7 +461,7 @@ export default function Projects() {
                 <div>
                   {(selectedProject.significance && selectedProject.significance.length > 0) && (
                     <div style={{ marginBottom: '1.75rem' }}>
-                      <h4 style={{ color: '#fff', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <h4 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                         <Sparkles size={16} color="var(--accent-gold)" /> 1. Ý NGHĨA & GIÁ TRỊ DỰ ÁN
                       </h4>
                       <ul style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.88rem', paddingLeft: '1.2rem', margin: 0 }}>
@@ -474,7 +474,7 @@ export default function Projects() {
 
                   {(selectedProject.architecture && selectedProject.architecture.length > 0) && (
                     <div style={{ marginBottom: '1.75rem' }}>
-                      <h4 style={{ color: '#fff', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <h4 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                         <Cpu size={16} color="var(--accent-cyan)" /> 2. KIẾN TRÚC & HOẠT ĐỘNG
                       </h4>
                       <ul style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.88rem', paddingLeft: '1.2rem', margin: 0 }}>
@@ -487,13 +487,13 @@ export default function Projects() {
 
                   {(selectedProject.features && selectedProject.features.length > 0) && (
                     <div>
-                      <h4 style={{ color: '#fff', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <h4 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.65rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                         <CheckCircle2 size={16} color="var(--accent-green)" /> 3. CHỨC NĂNG CHÍNH
                       </h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         {selectedProject.features.map((featGroup, fIdx) => (
                           <div key={fIdx} style={{ background: 'rgba(255,255,255,0.02)', padding: '0.85rem', borderLeft: '3px solid var(--accent-cyan)', border: '1px solid var(--surface-border)', borderRadius: '0 4px 4px 0' }}>
-                            <h5 style={{ fontSize: '0.85rem', color: '#fff', fontFamily: 'var(--font-heading)', marginBottom: '0.35rem' }}>
+                            <h5 style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', marginBottom: '0.35rem' }}>
                               {featGroup.group}
                             </h5>
                             <ul style={{ color: 'var(--text-muted)', fontSize: '0.82rem', lineHeight: 1.5, paddingLeft: '1.1rem', margin: 0 }}>

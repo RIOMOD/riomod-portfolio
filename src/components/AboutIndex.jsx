@@ -30,7 +30,7 @@ export default function AboutIndex() {
           {/* Left Column: INDEX PAGE */}
           <div className="editorial-box" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <h3 className="font-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: '#fff', letterSpacing: '0.05em', marginBottom: '1rem', borderBottom: '2px solid #fff', paddingBottom: '0.5rem' }}>
+              <h3 className="font-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: 'var(--text-primary)', letterSpacing: '0.05em', marginBottom: '1rem', borderBottom: '2px solid var(--text-primary)', paddingBottom: '0.5rem' }}>
                 INDEX PAGE
               </h3>
               <p style={{ color: 'var(--text-dim)', fontSize: '0.85rem', marginBottom: '1.75rem' }}>
@@ -54,7 +54,7 @@ export default function AboutIndex() {
                       transition: 'all 0.3s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = '#00f0ff';
+                      e.currentTarget.style.borderColor = 'var(--accent-cyan)';
                       e.currentTarget.style.background = 'rgba(0,240,255,0.08)';
                       e.currentTarget.style.transform = 'translateX(5px)';
                     }}
@@ -78,8 +78,8 @@ export default function AboutIndex() {
             {(profile.stats && profile.stats.length > 0) && (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '0.85rem', marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--surface-border)' }}>
                 {profile.stats.map((st, i) => (
-                  <div key={i} style={{ background: 'rgba(0,0,0,0.35)', padding: '0.85rem', borderLeft: '2px solid var(--accent-cyan)', borderRadius: '0 4px 4px 0' }}>
-                    <div className="font-display" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.75rem)', color: '#fff' }}>{st.value}</div>
+                  <div key={i} style={{ background: 'rgba(0,0,0,0.1)', padding: '0.85rem', borderLeft: '2px solid var(--accent-cyan)', borderRadius: '0 4px 4px 0' }}>
+                    <div className="font-display" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.75rem)', color: 'var(--text-primary)' }}>{st.value}</div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>{st.label}</div>
                   </div>
                 ))}
@@ -89,7 +89,7 @@ export default function AboutIndex() {
 
           {/* Right Column: WELCOME MESSAGE & Skills */}
           <div className="editorial-box">
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: '#fff', letterSpacing: '0.05em', marginBottom: '1rem', borderBottom: '2px solid #fff', paddingBottom: '0.5rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: 'var(--text-primary)', letterSpacing: '0.05em', marginBottom: '1rem', borderBottom: '2px solid var(--text-primary)', paddingBottom: '0.5rem' }}>
               WELCOME MESSAGE
             </h3>
 
@@ -97,7 +97,7 @@ export default function AboutIndex() {
             <div style={{ background: 'rgba(255,255,255,0.03)', borderLeft: '3px solid var(--accent-cyan)', padding: '1.25rem', marginBottom: '1.5rem', borderRadius: '0 4px 4px 0' }}>
               <Quote size={20} color="var(--accent-cyan)" style={{ marginBottom: '0.4rem', opacity: 0.85 }} />
               <p style={{ fontStyle: 'italic', fontSize: '0.92rem', color: 'var(--text-primary)', lineHeight: 1.6 }}>
-                "Sức mạnh thực sự của công nghệ là biến những giải pháp kỹ thuật phức tạp thành trải nghiệm trực quan sống động mà ai cũng có thể thấu hiểu."
+                "{profile.tagline || 'Sức mạnh thực sự của công nghệ là biến những giải pháp kỹ thuật phức tạp thành trải nghiệm trực quan sống động mà ai cũng có thể thấu hiểu.'}"
               </p>
             </div>
 
@@ -106,7 +106,7 @@ export default function AboutIndex() {
             </p>
 
             {/* Skills & Tech Stack Matrix */}
-            <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Cpu size={18} color="var(--accent-cyan)" /> CHUYÊN MÔN & KỸ NĂNG (SKILLS MATRIX)
             </h4>
 

@@ -75,7 +75,7 @@ export default function Contact() {
                 HỢP TÁC & DỰ ÁN
               </p>
 
-              <h2 className="font-display" style={{ fontSize: '3rem', color: '#fff', letterSpacing: '0.05em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+              <h2 className="font-display" style={{ fontSize: '3rem', color: 'var(--text-primary)', letterSpacing: '0.05em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
                 GET IN<br />TOUCH
               </h2>
 
@@ -91,7 +91,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', display: 'block' }}>Email Trực Tiếp</span>
-                    <span style={{ fontSize: '0.95rem', color: '#fff', fontWeight: 500 }}>{profile.email}</span>
+                    <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: 500 }}>{profile.email}</span>
                   </div>
                 </div>
 
@@ -101,7 +101,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', display: 'block' }}>Số Điện Thoại</span>
-                    <span style={{ fontSize: '0.95rem', color: '#fff', fontWeight: 500 }}>{profile.phone}</span>
+                    <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: 500 }}>{profile.phone}</span>
                   </div>
                 </div>
               </div>
@@ -128,13 +128,13 @@ export default function Contact() {
 
           {/* Right Column: Contact Form */}
           <div className="editorial-box" style={{ padding: '3rem 2.5rem' }}>
-            <h3 className="font-display" style={{ fontSize: '1.8rem', color: '#fff', letterSpacing: '0.05em', marginBottom: '1.5rem', borderBottom: '2px solid #fff', paddingBottom: '0.5rem' }}>
+            <h3 className="font-display" style={{ fontSize: '1.8rem', color: 'var(--text-primary)', letterSpacing: '0.05em', marginBottom: '1.5rem', borderBottom: '2px solid var(--text-primary)', paddingBottom: '0.5rem' }}>
               SEND A MESSAGE
             </h3>
 
             {submitted ? (
               <div style={{ textAlign: 'center', padding: '3rem 1rem', background: 'rgba(0,240,255,0.05)', border: '1px solid var(--accent-cyan)' }}>
-                <h4 style={{ fontSize: '1.3rem', color: '#fff', marginBottom: '0.5rem', fontFamily: 'var(--font-heading)' }}>
+                <h4 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginBottom: '0.5rem', fontFamily: 'var(--font-heading)' }}>
                   Cảm Ơn Bạn Đã Gửi Tin Nhắn!
                 </h4>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>

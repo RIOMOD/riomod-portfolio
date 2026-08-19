@@ -28,7 +28,7 @@ export default function Timeline() {
         <div className="editorial-box">
           
           <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 3.5rem' }}>
-            <h2 className="font-display" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.75rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>
+            <h2 className="font-display" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.75rem)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>
               HÀNH TRÌNH TỰ PHÁT TRIỂN
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: 'clamp(0.9rem, 2vw, 1rem)', lineHeight: 1.7 }}>
@@ -87,7 +87,7 @@ export default function Timeline() {
                 </div>
 
                 {/* Milestone Title */}
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.15rem, 3vw, 1.35rem)', color: '#fff', marginBottom: '0.65rem' }}>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.15rem, 3vw, 1.35rem)', color: 'var(--text-primary)', marginBottom: '0.65rem' }}>
                   {item.title}
                 </h3>
 

@@ -31,19 +31,19 @@ export default function Hero({ isMagazineMode, toggleMagazineMode }) {
 
           {/* Large Bold Editorial Box */}
           <div style={{
-            border: '3px solid #ffffff',
+            border: '3px solid var(--text-primary)',
             padding: 'clamp(1.5rem, 5vw, 2.75rem) clamp(1rem, 3vw, 2rem)',
             margin: '0 auto 2.5rem',
             maxWidth: '680px',
             width: '100%',
-            background: 'rgba(9, 10, 13, 0.45)',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+            background: 'var(--bg-card)',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.15)'
           }}>
-            <h1 className="font-display" style={{ fontSize: 'clamp(2.75rem, 9vw, 6.2rem)', lineHeight: 0.95, letterSpacing: '0.06em', color: '#ffffff', textTransform: 'uppercase' }}>
+            <h1 className="font-display" style={{ fontSize: 'clamp(2.75rem, 9vw, 6.2rem)', lineHeight: 0.95, letterSpacing: '0.06em', color: 'var(--text-primary)', textTransform: 'uppercase' }}>
               PORT<br/>FOLIO
             </h1>
             
-            <div style={{ width: '120px', height: '2px', background: '#ffffff', margin: '1.5rem auto' }}></div>
+            <div style={{ width: '120px', height: '2px', background: 'var(--text-primary)', margin: '1.5rem auto' }}></div>
             
             <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(0.85rem, 2vw, 1rem)', letterSpacing: '0.25em', color: 'var(--text-muted)' }}>
               EDITION 2026 ● 3D EXPERIENCE
@@ -51,7 +51,7 @@ export default function Hero({ isMagazineMode, toggleMagazineMode }) {
           </div>
 
           {/* Title & Tagline */}
-          <h2 style={{ fontSize: 'clamp(1.1rem, 3vw, 1.45rem)', fontFamily: 'var(--font-heading)', color: '#ffffff', letterSpacing: '0.08em', marginBottom: '1rem', textTransform: 'uppercase' }}>
+          <h2 style={{ fontSize: 'clamp(1.1rem, 3vw, 1.45rem)', fontFamily: 'var(--font-heading)', color: 'var(--text-primary)', letterSpacing: '0.08em', marginBottom: '1rem', textTransform: 'uppercase' }}>
             {profile.name} — <span style={{ color: 'var(--accent-cyan)' }}>{profile.title}</span>
           </h2>
 

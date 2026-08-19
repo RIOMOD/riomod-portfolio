@@ -4,12 +4,16 @@ import { playPageFlipSound } from '../utils/audioUtils';
 import { 
   ChevronLeft, ChevronRight, BookOpen, X, Sparkles, 
   Award, Calendar, ExternalLink, ArrowRight, Volume2, VolumeX,
-  Layers, Sliders, Check
+  Sliders, Sun, Moon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BrochureView({ onClose }) {
-  const { profile, skills, timeline, projects, events, certificates, bookletSettings, updateBookletSettings } = usePortfolioData();
+  const { 
+    profile, skills, timeline, projects, events, certificates, 
+    bookletSettings, updateBookletSettings, theme, toggleTheme 
+  } = usePortfolioData();
+
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
@@ -26,6 +30,15 @@ export default function BrochureView({ onClose }) {
     { id: 'zoom-flip', label: '🚀 Phóng Thu 3D (Zoom Flip)' }
   ];
 
+  // Dynamic Theme Colors for Booklet
+  const isLight = theme === 'light';
+  const bookBg = isLight ? '#ffffff' : '#0c0e14';
+  const bookCoverBg = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(9, 10, 13, 0.85)';
+  const bookCoverBorder = isLight ? '3px solid #0f172a' : '3px solid #ffffff';
+  const overlayBg = isLight ? 'rgba(241, 245, 249, 0.96)' : 'rgba(4, 5, 8, 0.96)';
+  const itemBg = isLight ? 'rgba(15, 23, 42, 0.03)' : 'rgba(255, 255, 255, 0.02)';
+  const activeItemBg = isLight ? 'rgba(2, 132, 199, 0.08)' : 'rgba(0, 240, 255, 0.08)';
+
   // Spreads Definition
   const spreads = [
     // SPREAD 1: COVER & TABLE OF CONTENTS
@@ -35,22 +48,23 @@ export default function BrochureView({ onClose }) {
       left: (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center', padding: 'clamp(1.5rem, 4vw, 3.5rem)' }}>
           <div style={{
-            border: '3px solid #ffffff',
+            border: bookCoverBorder,
             padding: 'clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3.5vw, 3rem)',
-            background: 'rgba(9, 10, 13, 0.75)',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(0, 240, 255, 0.15)',
+            background: bookCoverBg,
+            boxShadow: isLight ? '0 20px 45px rgba(0,0,0,0.1)' : '0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(0, 240, 255, 0.15)',
             width: '100%',
             maxWidth: '520px',
-            position: 'relative'
+            position: 'relative',
+            borderRadius: '4px'
           }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(0,240,255,0.1)', padding: '0.25rem 0.85rem', borderRadius: '50px', border: '1px solid rgba(0,240,255,0.3)', marginBottom: '1.25rem' }}>
-              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#00f0ff', boxShadow: '0 0 8px #00f0ff' }}></span>
-              <span style={{ fontSize: '0.72rem', color: '#00f0ff', fontWeight: 600, letterSpacing: '0.1em' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(2,132,199,0.1)', padding: '0.25rem 0.85rem', borderRadius: '50px', border: '1px solid var(--accent-cyan)', marginBottom: '1.25rem' }}>
+              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--accent-cyan)' }}></span>
+              <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)', fontWeight: 600, letterSpacing: '0.1em' }}>
                 EDITION 2026 ● 3D ARCHIVE
               </span>
             </div>
 
-            <h1 className="font-display" style={{ fontSize: 'clamp(3rem, 7vw, 5.2rem)', lineHeight: 0.92, color: '#ffffff', letterSpacing: '0.04em', margin: '0.5rem 0', textTransform: 'uppercase' }}>
+            <h1 className="font-display" style={{ fontSize: 'clamp(3rem, 7vw, 5.2rem)', lineHeight: 0.92, color: 'var(--text-primary)', letterSpacing: '0.04em', margin: '0.5rem 0', textTransform: 'uppercase' }}>
               PORT<br/>FOLIO
             </h1>
 
@@ -61,7 +75,7 @@ export default function BrochureView({ onClose }) {
             </p>
           </div>
 
-          <h2 className="font-display" style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)', color: '#ffffff', marginTop: '2rem', letterSpacing: '0.08em' }}>
+          <h2 className="font-display" style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)', color: 'var(--text-primary)', marginTop: '2rem', letterSpacing: '0.08em' }}>
             {profile.name || 'NGUYỄN CÔNG TRỨ'}
           </h2>
           <p style={{ fontSize: 'clamp(0.85rem, 1.5vw, 1rem)', color: 'var(--accent-cyan)', fontFamily: 'var(--font-heading)', marginTop: '0.35rem', fontWeight: 600 }}>
@@ -77,7 +91,7 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 02</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
               MỤC LỤC TỔNG QUAN
             </h3>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.75rem' }}>
@@ -100,30 +114,18 @@ export default function BrochureView({ onClose }) {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '0.75rem 1.25rem',
-                    background: currentPage === item.spreadIdx ? 'rgba(0,240,255,0.08)' : 'rgba(255,255,255,0.02)',
+                    background: currentPage === item.spreadIdx ? activeItemBg : itemBg,
                     border: '1px solid',
                     borderColor: currentPage === item.spreadIdx ? 'var(--accent-cyan)' : 'var(--surface-border)',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--accent-cyan)';
-                    e.currentTarget.style.background = 'rgba(0,240,255,0.06)';
-                    e.currentTarget.style.transform = 'translateX(6px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (currentPage !== item.spreadIdx) {
-                      e.currentTarget.style.borderColor = 'var(--surface-border)';
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
-                    }
-                    e.currentTarget.style.transform = 'translateX(0)';
-                  }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <span className="font-display" style={{ color: 'var(--accent-cyan)', fontSize: '1.15rem' }}>{item.no}</span>
                     <div>
-                      <div style={{ fontSize: '0.92rem', color: '#ffffff', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>{item.title}</div>
+                      <div style={{ fontSize: '0.92rem', color: 'var(--text-primary)', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>{item.title}</div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{item.desc}</div>
                     </div>
                   </div>
@@ -152,11 +154,11 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 03</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
               LỜI NGỎ & TẦM NHÌN
             </h3>
 
-            <div style={{ background: 'rgba(0,240,255,0.04)', borderLeft: '3px solid var(--accent-cyan)', padding: '1rem 1.25rem', margin: '1.25rem 0', borderRadius: '0 6px 6px 0' }}>
+            <div style={{ background: isLight ? 'rgba(2,132,199,0.06)' : 'rgba(0,240,255,0.04)', borderLeft: '3px solid var(--accent-cyan)', padding: '1rem 1.25rem', margin: '1.25rem 0', borderRadius: '0 6px 6px 0' }}>
               <p style={{ fontStyle: 'italic', fontSize: '0.9rem', color: 'var(--text-primary)', lineHeight: 1.6 }}>
                 "{profile.tagline || 'Sinh viên CNTT am hiểu sâu sắc lộ trình học EdTech, giàu kinh nghiệm truyền thông, sự kiện và tư vấn giải pháp kỹ thuật.'}"
               </p>
@@ -170,8 +172,8 @@ export default function BrochureView({ onClose }) {
           {(profile.stats && profile.stats.length > 0) && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.85rem', borderTop: '1px solid var(--surface-border)', paddingTop: '1.25rem', marginTop: '1.5rem' }}>
               {profile.stats.map((st, i) => (
-                <div key={i} style={{ background: 'rgba(0,0,0,0.35)', padding: '0.85rem', borderLeft: '2px solid var(--accent-cyan)', borderRadius: '0 4px 4px 0' }}>
-                  <div className="font-display" style={{ fontSize: '1.4rem', color: '#fff' }}>{st.value}</div>
+                <div key={i} style={{ background: itemBg, padding: '0.85rem', borderLeft: '2px solid var(--accent-cyan)', borderRadius: '0 4px 4px 0' }}>
+                  <div className="font-display" style={{ fontSize: '1.4rem', color: 'var(--text-primary)' }}>{st.value}</div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{st.label}</div>
                 </div>
               ))}
@@ -187,7 +189,7 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 04</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
               CHUYÊN MÔN & KỸ NĂNG
             </h3>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
@@ -197,11 +199,11 @@ export default function BrochureView({ onClose }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {skills.map((s, i) => (
                 <div key={i}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#fff', marginBottom: '0.35rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                     <span style={{ fontWeight: 500 }}>{s.name}</span>
                     <span style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-heading)', fontWeight: 600 }}>{s.level}%</span>
                   </div>
-                  <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '6px', background: isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
                     <div style={{ width: `${s.level}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent-cyan), var(--accent-purple))', borderRadius: '3px' }}></div>
                   </div>
                 </div>
@@ -209,7 +211,7 @@ export default function BrochureView({ onClose }) {
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1rem', border: '1px solid var(--surface-border)', borderRadius: '6px', marginTop: '1.5rem' }}>
+          <div style={{ background: itemBg, padding: '1rem', border: '1px solid var(--surface-border)', borderRadius: '6px', marginTop: '1.5rem' }}>
             <div style={{ fontSize: '0.78rem', color: 'var(--accent-gold)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               ★ ĐIỂM MẠNH NỔI BẬT:
             </div>
@@ -233,7 +235,7 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 05</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
               HÀNH TRÌNH PHÁT TRIỂN
             </h3>
 
@@ -241,14 +243,14 @@ export default function BrochureView({ onClose }) {
               {timeline.slice(0, 4).map((item, i) => (
                 <div key={i} style={{ borderLeft: '2px solid var(--accent-cyan)', paddingLeft: '1rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)', background: 'rgba(0,240,255,0.1)', padding: '0.15rem 0.5rem', borderRadius: '3px' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)', background: isLight ? 'rgba(2,132,199,0.1)' : 'rgba(0,240,255,0.1)', padding: '0.15rem 0.5rem', borderRadius: '3px' }}>
                       {item.period}
                     </span>
                     <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 600 }}>
                       {item.phase}
                     </span>
                   </div>
-                  <h4 style={{ fontSize: '0.95rem', color: '#fff', margin: '0.2rem 0', fontFamily: 'var(--font-heading)' }}>{item.title}</h4>
+                  <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', margin: '0.2rem 0', fontFamily: 'var(--font-heading)' }}>{item.title}</h4>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.55 }}>{item.description}</p>
                 </div>
               ))}
@@ -264,16 +266,16 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 06</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
               DỰ ÁN TIÊU BIỂU
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {projects.slice(0, 3).map((p) => (
-                <div key={p.id} style={{ border: '1px solid var(--surface-border)', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '6px' }}>
+                <div key={p.id} style={{ border: '1px solid var(--surface-border)', padding: '1rem', background: itemBg, borderRadius: '6px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h4 className="font-display" style={{ fontSize: '1.05rem', color: '#fff' }}>{p.title}</h4>
-                    <span style={{ fontSize: '0.68rem', padding: '0.15rem 0.5rem', borderRadius: '3px', background: p.status === 'Đã hoàn thành' ? 'rgba(16,185,129,0.15)' : 'rgba(0,240,255,0.15)', color: p.status === 'Đã hoàn thành' ? '#10b981' : '#00f0ff', fontWeight: 600 }}>
+                    <h4 className="font-display" style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>{p.title}</h4>
+                    <span style={{ fontSize: '0.68rem', padding: '0.15rem 0.5rem', borderRadius: '3px', background: p.status === 'Đã hoàn thành' ? 'rgba(16,185,129,0.15)' : 'rgba(2,132,199,0.15)', color: p.status === 'Đã hoàn thành' ? 'var(--accent-green)' : 'var(--accent-cyan)', fontWeight: 600 }}>
                       {p.status}
                     </span>
                   </div>
@@ -304,20 +306,20 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 07</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
               SỰ KIỆN & TRUYỀN THÔNG
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {events.slice(0, 5).map((ev) => (
-                <div key={ev.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.85rem' }}>
+                <div key={ev.id} style={{ borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.85rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ fontSize: '0.68rem', color: 'var(--accent-gold)', background: 'rgba(255,183,3,0.12)', padding: '0.15rem 0.5rem', borderRadius: '3px', fontWeight: 600 }}>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--accent-gold)', background: isLight ? 'rgba(180,83,9,0.12)' : 'rgba(255,183,3,0.12)', padding: '0.15rem 0.5rem', borderRadius: '3px', fontWeight: 600 }}>
                       ★ {ev.badge || 'SỰ KIỆN'}
                     </span>
                     {ev.date && <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>• {ev.date}</span>}
                   </div>
-                  <h4 style={{ fontSize: '0.92rem', color: '#fff', marginTop: '0.35rem', fontFamily: 'var(--font-heading)' }}>{ev.title}</h4>
+                  <h4 style={{ fontSize: '0.92rem', color: 'var(--text-primary)', marginTop: '0.35rem', fontFamily: 'var(--font-heading)' }}>{ev.title}</h4>
                   <p style={{ fontSize: '0.78rem', color: 'var(--accent-cyan)', marginTop: '0.15rem' }}>{ev.role}</p>
                 </div>
               ))}
@@ -333,14 +335,14 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 08</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
               VĂN BẰNG & CHỨNG CHỈ
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {certificates.slice(0, 5).map((c, idx) => (
-                <div key={c.id || idx} style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', background: 'rgba(255,255,255,0.02)', padding: '0.75rem 1rem', borderRadius: '0 6px 6px 0' }}>
-                  <h4 style={{ fontSize: '0.92rem', color: '#fff', fontFamily: 'var(--font-heading)' }}>{c.title}</h4>
+                <div key={c.id || idx} style={{ borderLeft: '3px solid var(--accent-gold)', paddingLeft: '1rem', background: itemBg, padding: '0.75rem 1rem', borderRadius: '0 6px 6px 0' }}>
+                  <h4 style={{ fontSize: '0.92rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>{c.title}</h4>
                   <p style={{ fontSize: '0.78rem', color: 'var(--accent-cyan)', marginTop: '0.2rem' }}>{c.issuer} {c.date ? `(${c.date})` : ''}</p>
                   {c.description && <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '0.25rem', lineHeight: 1.45 }}>{c.description}</p>}
                 </div>
@@ -363,7 +365,7 @@ export default function BrochureView({ onClose }) {
               <span style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)' }}>PAGE 09</span>
             </div>
 
-            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', color: '#ffffff', letterSpacing: '0.04em', marginBottom: '0.75rem' }}>
+            <h3 className="font-display" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', color: 'var(--text-primary)', letterSpacing: '0.04em', marginBottom: '0.75rem' }}>
               KẾT NỐI TRỰC TIẾP
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.65, marginBottom: '1.75rem' }}>
@@ -372,21 +374,21 @@ export default function BrochureView({ onClose }) {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {profile.email && (
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.85rem 1.15rem', border: '1px solid var(--surface-border)', borderRadius: '6px' }}>
+                <div style={{ background: itemBg, padding: '0.85rem 1.15rem', border: '1px solid var(--surface-border)', borderRadius: '6px' }}>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>EMAIL</span>
                   <span style={{ color: 'var(--accent-cyan)', fontWeight: 600, fontSize: '0.92rem' }}>{profile.email}</span>
                 </div>
               )}
 
               {profile.phone && (
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.85rem 1.15rem', border: '1px solid var(--surface-border)', borderRadius: '6px' }}>
+                <div style={{ background: itemBg, padding: '0.85rem 1.15rem', border: '1px solid var(--surface-border)', borderRadius: '6px' }}>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>HOTLINE / ZALO</span>
-                  <span style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.92rem' }}>{profile.phone}</span>
+                  <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.92rem' }}>{profile.phone}</span>
                 </div>
               )}
 
               {profile.location && (
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.85rem 1.15rem', border: '1px solid var(--surface-border)', borderRadius: '6px' }}>
+                <div style={{ background: itemBg, padding: '0.85rem 1.15rem', border: '1px solid var(--surface-border)', borderRadius: '6px' }}>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>ĐỊA CHỈ KHU VỰC</span>
                   <span style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>{profile.location}</span>
                 </div>
@@ -397,11 +399,11 @@ export default function BrochureView({ onClose }) {
       ),
       right: (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center', padding: 'clamp(1.5rem, 4vw, 3.5rem)' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(0,240,255,0.12)', border: '1px solid var(--accent-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', boxShadow: '0 0 25px rgba(0,240,255,0.25)' }}>
+          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(2,132,199,0.12)', border: '1px solid var(--accent-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', boxShadow: '0 0 25px rgba(2,132,199,0.25)' }}>
             <Sparkles size={28} color="var(--accent-cyan)" />
           </div>
 
-          <h3 className="font-display" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', color: '#ffffff', letterSpacing: '0.05em' }}>
+          <h3 className="font-display" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', color: 'var(--text-primary)', letterSpacing: '0.05em' }}>
             THANK YOU
           </h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginTop: '0.75rem', maxWidth: '380px', lineHeight: 1.65 }}>
@@ -591,7 +593,7 @@ export default function BrochureView({ onClose }) {
     <div style={{
       position: 'fixed',
       inset: 0,
-      background: 'rgba(4, 5, 8, 0.96)',
+      background: overlayBg,
       backdropFilter: 'blur(28px)',
       zIndex: 6000,
       display: 'flex',
@@ -601,17 +603,18 @@ export default function BrochureView({ onClose }) {
       perspective: '2600px',
       overflow: 'hidden',
       width: '100vw',
-      height: '100vh'
+      height: '100vh',
+      color: 'var(--text-primary)'
     }}>
       
       {/* Top Header Bar with Live Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1600px', margin: '0 auto', padding: '0 0.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(0,240,255,0.12)', border: '1px solid rgba(0,240,255,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: isLight ? 'rgba(2,132,199,0.1)' : 'rgba(0,240,255,0.12)', border: '1px solid var(--accent-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <BookOpen size={20} color="var(--accent-cyan)" />
           </div>
           <div>
-            <span className="font-display" style={{ fontSize: 'clamp(0.95rem, 2vw, 1.2rem)', color: '#ffffff', letterSpacing: '0.08em' }}>
+            <span className="font-display" style={{ fontSize: 'clamp(0.95rem, 2vw, 1.2rem)', color: 'var(--text-primary)', letterSpacing: '0.08em' }}>
               3D EDITORIAL BOOKLET
             </span>
             <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', display: 'block' }}>
@@ -620,11 +623,32 @@ export default function BrochureView({ onClose }) {
           </div>
         </div>
 
-        {/* Live Controls: Effect Selector & Sound Toggle */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        {/* Live Controls: Theme Switcher, Effect Selector & Sound Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
           
+          {/* In-Booklet Theme Switcher */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="btn-editorial"
+            style={{ padding: '0.45rem 0.75rem', fontSize: '0.78rem', gap: '0.4rem', borderRadius: '20px' }}
+            title="Đổi giao diện Sáng / Tối"
+          >
+            {isLight ? (
+              <>
+                <Moon size={15} color="var(--accent-purple)" />
+                <span style={{ fontSize: '0.72rem' }}>Chế độ Tối</span>
+              </>
+            ) : (
+              <>
+                <Sun size={15} color="var(--accent-gold)" />
+                <span style={{ fontSize: '0.72rem' }}>Chế độ Sáng</span>
+              </>
+            )}
+          </button>
+
           {/* Flip Effect Selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.06)', padding: '0.3rem 0.6rem', borderRadius: '6px', border: '1px solid var(--surface-border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: itemBg, padding: '0.3rem 0.6rem', borderRadius: '6px', border: '1px solid var(--surface-border)' }}>
             <Sliders size={14} color="var(--accent-cyan)" />
             <select
               value={currentEffect}
@@ -636,7 +660,7 @@ export default function BrochureView({ onClose }) {
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: '#ffffff',
+                color: 'var(--text-primary)',
                 fontSize: '0.78rem',
                 fontFamily: 'var(--font-heading)',
                 outline: 'none',
@@ -645,7 +669,7 @@ export default function BrochureView({ onClose }) {
               title="Chọn hiệu ứng lật 3D"
             >
               {flipEffectsList.map((item) => (
-                <option key={item.id} value={item.id} style={{ background: '#12141a', color: '#fff' }}>
+                <option key={item.id} value={item.id} style={{ background: isLight ? '#ffffff' : '#12141a', color: isLight ? '#0f172a' : '#fff' }}>
                   {item.label}
                 </option>
               ))}
@@ -712,10 +736,10 @@ export default function BrochureView({ onClose }) {
             style={{
               width: '100%',
               height: 'clamp(480px, 80vh, 780px)',
-              background: '#0c0e14',
-              border: '1px solid rgba(255,255,255,0.25)',
+              background: bookBg,
+              border: isLight ? '1px solid rgba(15, 23, 42, 0.2)' : '1px solid rgba(255,255,255,0.25)',
               borderRadius: '10px',
-              boxShadow: '0 30px 100px rgba(0, 0, 0, 0.98), 0 0 50px rgba(0, 240, 255, 0.15)',
+              boxShadow: isLight ? '0 30px 80px rgba(0, 0, 0, 0.15)' : '0 30px 100px rgba(0, 0, 0, 0.98), 0 0 50px rgba(0, 240, 255, 0.15)',
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               position: 'relative',
@@ -732,13 +756,15 @@ export default function BrochureView({ onClose }) {
               left: '50%',
               width: '40px',
               transform: 'translateX(-50%)',
-              background: 'linear-gradient(to right, rgba(0,0,0,0.65), transparent 45%, transparent 55%, rgba(0,0,0,0.65))',
+              background: isLight 
+                ? 'linear-gradient(to right, rgba(0,0,0,0.18), transparent 45%, transparent 55%, rgba(0,0,0,0.18))'
+                : 'linear-gradient(to right, rgba(0,0,0,0.65), transparent 45%, transparent 55%, rgba(0,0,0,0.65))',
               zIndex: 15,
               pointerEvents: 'none'
             }} />
 
             {/* Left Page Spread */}
-            <div className="booklet-page" style={{ height: '100%', overflowY: 'auto', borderRight: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="booklet-page" style={{ height: '100%', overflowY: 'auto', borderRight: '1px solid var(--surface-border)' }}>
               {spreads[currentPage].left}
             </div>
 
@@ -774,7 +800,7 @@ export default function BrochureView({ onClose }) {
                 width: currentPage === idx ? '28px' : '10px',
                 height: '8px',
                 borderRadius: '4px',
-                background: currentPage === idx ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.2)',
+                background: currentPage === idx ? 'var(--accent-cyan)' : 'var(--surface-border)',
                 border: 'none',
                 cursor: 'pointer',
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
