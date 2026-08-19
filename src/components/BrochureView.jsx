@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { portfolioData } from '../data/portfolioData';
+import { usePortfolioData } from '../context/DataContext';
 import { ChevronLeft, ChevronRight, BookOpen, X, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export default function BrochureView({ onClose }) {
-  const { profile, skills, timeline, projects, events, certificates } = portfolioData;
+  const { profile, skills, timeline, projects, events, certificates } = usePortfolioData();
   const [currentPage, setCurrentPage] = useState(0);
 
   // Spread Spreads defined according to the reference image booklet structure

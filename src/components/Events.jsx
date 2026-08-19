@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { portfolioData } from '../data/portfolioData';
+import { usePortfolioData } from '../context/DataContext';
 import { 
   Calendar, MapPin, Award, X, ChevronLeft, ChevronRight, 
   ZoomIn, ZoomOut, RotateCcw, Play, Pause, Maximize2, ExternalLink, Sparkles 
@@ -8,7 +8,6 @@ import {
 // Helper function to resolve Google Drive file links and Google Photos CDN URLs to direct image source
 const formatImageUrl = (url) => {
   if (!url) return '';
-  // Convert Google Drive file share link: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
   const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
   if (driveMatch && driveMatch[1]) {
     return `https://lh3.googleusercontent.com/d/${driveMatch[1]}=s1600`;
@@ -17,7 +16,7 @@ const formatImageUrl = (url) => {
 };
 
 export default function Events() {
-  const { events } = portfolioData;
+  const { events } = usePortfolioData();
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -26,7 +25,7 @@ export default function Events() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const ITEMS_PER_PAGE = 3;
-  const totalPages = Math.ceil(events.length / ITEMS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(events.length / ITEMS_PER_PAGE));
   const paginatedEvents = events.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -70,8 +69,8 @@ export default function Events() {
   const currentGallery = rawGallery.map(formatImageUrl);
 
   return (
-    <section id="events" style={{ padding: '6rem 1.5rem', position: 'relative' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <section id="events" style={{ padding: '6rem 0', position: 'relative', width: '100%' }}>
+      <div className="site-container">
         
         {/* Header Section */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '1rem' }}>
@@ -403,10 +402,10 @@ export default function Events() {
               {/* 2-COLUMN LAYOUT: SLIDESHOW + DETAILS */}
               <div style={{ 
                 display: 'grid', 
-                gridTemplateColumns: 'minmax(320px, 580px) 1fr', 
-                gap: '2.5rem', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))', 
+                gap: '2rem', 
                 alignItems: 'start',
-                marginBottom: '3rem'
+                marginBottom: '2.5rem'
               }}>
                 
                 {/* LEFT COLUMN: AUTO-PLAY SLIDESHOW & THUMBNAILS */}

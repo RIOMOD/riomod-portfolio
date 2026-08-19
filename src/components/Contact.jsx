@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { portfolioData } from '../data/portfolioData';
+import { usePortfolioData } from '../context/DataContext';
 import { Mail, Phone, MapPin, Send, Copy, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -25,7 +25,7 @@ const FacebookIcon = ({ size = 18 }) => (
 );
 
 export default function Contact() {
-  const { profile } = portfolioData;
+  const { profile } = usePortfolioData();
   const [copied, setCopied] = useState(false);
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -55,8 +55,8 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" style={{ padding: '6rem 1.5rem 4rem', position: 'relative', zIndex: 1 }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <section id="contact" style={{ padding: '6rem 0 4rem', position: 'relative', zIndex: 1, width: '100%' }}>
+      <div className="site-container">
         
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '1rem' }}>

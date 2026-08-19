@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { DataProvider, usePortfolioData } from './context/DataContext';
 import ThreeCanvas from './components/ThreeCanvas';
+import Header from './components/Header';
 import Hero from './components/Hero';
 import AboutIndex from './components/AboutIndex';
 import Timeline from './components/Timeline';
@@ -8,53 +10,35 @@ import Events from './components/Events';
 import Certificates from './components/Certificates';
 import Contact from './components/Contact';
 import BrochureView from './components/BrochureView';
-import { portfolioData } from './data/portfolioData';
-import { BookOpen, Sparkles, Volume2, VolumeX, Layers, Menu, X } from 'lucide-react';
+import AdminModal from './components/admin/AdminModal';
 
-export default function App() {
+function PortfolioMain() {
   const [isMagazineMode, setIsMagazineMode] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { setIsAdminOpen } = usePortfolioData();
+
+  // Listen for #admin hash in URL
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === '#admin') {
+        setIsAdminOpen(true);
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, [setIsAdminOpen]);
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', background: 'var(--bg-dark)' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', width: '100%', background: 'var(--bg-dark)', overflowX: 'hidden' }}>
       
       {/* 3D WebGL Canvas Background */}
       <ThreeCanvas />
 
-      {/* Floating Top Navigation Header */}
-      <header className="nav-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <a href="#hero" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span className="font-display" style={{ fontSize: '1.4rem', color: '#fff', letterSpacing: '0.1em' }}>
-              ALEX NGUYỄN
-            </span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--accent-cyan)', border: '1px solid rgba(0,240,255,0.3)', padding: '0.1rem 0.4rem' }}>
-              3D PORTFOLIO
-            </span>
-          </a>
-        </div>
-
-        {/* Desktop Nav Links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }} className="desktop-nav">
-          <a href="#about" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>GIỚI THIỆU</a>
-          <a href="#timeline" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>HÀNH TRÌNH</a>
-          <a href="#projects" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>DỰ ÁN CODE</a>
-          <a href="#events" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>SỰ KIỆN</a>
-          <a href="#certificates" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>BẰNG CẤP</a>
-          <a href="#contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>LIÊN HỆ</a>
-          
-          <button 
-            className="btn-editorial btn-accent" 
-            onClick={() => setIsMagazineMode(true)}
-            style={{ padding: '0.45rem 1rem', fontSize: '0.75rem' }}
-          >
-            <BookOpen size={14} /> Chế Độ Lật Sách 3D
-          </button>
-        </nav>
-      </header>
+      {/* Responsive Top Navigation Header */}
+      <Header onOpenMagazine={() => setIsMagazineMode(true)} />
 
       {/* Main Content Render */}
-      <main>
+      <main style={{ width: '100%', overflowX: 'hidden' }}>
         <Hero 
           isMagazineMode={isMagazineMode} 
           toggleMagazineMode={() => setIsMagazineMode(true)} 
@@ -67,11 +51,22 @@ export default function App() {
         <Contact />
       </main>
 
-      {/* 3D Magazine Booklet Modal View (Trải nghiệm lật trang như hình tham chiếu) */}
+      {/* 3D Magazine Booklet Modal View */}
       {isMagazineMode && (
         <BrochureView onClose={() => setIsMagazineMode(false)} />
       )}
 
+      {/* Admin Dashboard Modal */}
+      <AdminModal />
+
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <DataProvider>
+      <PortfolioMain />
+    </DataProvider>
   );
 }

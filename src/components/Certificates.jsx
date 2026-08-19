@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { portfolioData } from '../data/portfolioData';
+import { usePortfolioData } from '../context/DataContext';
 import { Award, ShieldCheck, ExternalLink, X, FileText, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Certificates() {
-  const { certificates } = portfolioData;
+  const { certificates } = usePortfolioData();
   const [selectedCert, setSelectedCert] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const ITEMS_PER_PAGE = 3;
-  const totalPages = Math.ceil(certificates.length / ITEMS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(certificates.length / ITEMS_PER_PAGE));
   const paginatedCerts = certificates.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
   return (
-    <section id="certificates" style={{ padding: '6rem 1.5rem', position: 'relative' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <section id="certificates" style={{ padding: '6rem 0', position: 'relative', width: '100%' }}>
+      <div className="site-container">
         
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '1rem' }}>
