@@ -1,4 +1,4 @@
-// High-performance Web Audio API Sound Synthesizer for Realistic Page Flip
+// Advanced Web Audio API Synthesizer for Hyper-Realistic Magazine Paper Flip Sound
 let audioCtx = null;
 
 function getAudioContext() {
@@ -15,60 +15,80 @@ function getAudioContext() {
 }
 
 /**
- * Play a synthesized realistic paper page-flip sound effect
- * Uses filtered white noise + resonance bandpass + fast decay envelope.
+ * Play a hyper-realistic, natural book page-turning sound effect.
+ * Uses a dual-layer audio synthesis:
+ * - Layer 1: Silky paper surface friction & rustle (dynamic modulated bandpass)
+ * - Layer 2: Subtle air whoosh displacement & book spine body resonance
+ * - Subtle randomized pitch variations on every flip for organic feel.
  */
-export function playPageFlipSound(enabled = true, volume = 0.6) {
+export function playPageFlipSound(enabled = true, volume = 0.55) {
   if (!enabled || typeof window === 'undefined') return;
 
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
 
-    const bufferSize = ctx.sampleRate * 0.18; // ~180ms duration
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
+    const now = ctx.currentTime;
+    const duration = 0.16 + Math.random() * 0.03; // ~160ms - 190ms natural variance
 
-    // Generate textured pink/white noise with flutter
-    let lastOut = 0.0;
+    // 1. GENERATE DUAL TEXTURED NOISE BUFFER
+    const bufferSize = Math.floor(ctx.sampleRate * duration);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = buffer.getChannelData(0);
+
+    let lastSample = 0.0;
     for (let i = 0; i < bufferSize; i++) {
+      const progress = i / bufferSize;
       const white = Math.random() * 2 - 1;
-      // Pink filter smooth
-      data[i] = (lastOut + 0.04 * white) / 1.04;
-      lastOut = data[i];
-      // Add subtle rustling modulation
-      data[i] *= 1 + 0.5 * Math.sin((i / bufferSize) * Math.PI * 8);
+      
+      // Soft pink noise filter
+      const pink = (lastSample + 0.06 * white) / 1.06;
+      lastSample = pink;
+
+      // Micro-flutter modulation (simulating paper grain dragging against paper)
+      const flutter = Math.sin(progress * Math.PI * 14) * 0.25;
+      output[i] = (pink + flutter * 0.1) * (1 - Math.pow(progress, 2.5));
     }
 
-    const noiseNode = ctx.createBufferSource();
-    noiseNode.buffer = buffer;
+    const noiseSource = ctx.createBufferSource();
+    noiseSource.buffer = buffer;
 
-    // Bandpass filter to simulate crisp paper texture
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(1400, ctx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(700, ctx.currentTime + 0.16);
-    filter.Q.setValueAtTime(2.2, ctx.currentTime);
+    // 2. LAYER 1: SILKY PAPER FRICTION (Bandpass Sweep)
+    const bandpass = ctx.createBiquadFilter();
+    bandpass.type = 'bandpass';
+    const startFreq = 1800 + (Math.random() * 300 - 150);
+    const endFreq = 650 + (Math.random() * 100 - 50);
+    bandpass.frequency.setValueAtTime(startFreq, now);
+    bandpass.frequency.exponentialRampToValueAtTime(Math.max(100, endFreq), now + duration * 0.85);
+    bandpass.Q.setValueAtTime(1.8, now);
 
-    // Highpass to eliminate muddy low rumble
+    // 3. LAYER 2: HIGH TEXTURE AIR FRICTION (Highpass)
     const highpass = ctx.createBiquadFilter();
     highpass.type = 'highpass';
-    highpass.frequency.setValueAtTime(350, ctx.currentTime);
+    highpass.frequency.setValueAtTime(320, now);
 
-    // Gain envelope (Fast attack, natural decay)
+    // 4. LOW-PASS MELLOWING (Prevents harsh digital hiss)
+    const lowpass = ctx.createBiquadFilter();
+    lowpass.type = 'lowpass';
+    lowpass.frequency.setValueAtTime(4500, now);
+    lowpass.frequency.exponentialRampToValueAtTime(1800, now + duration);
+
+    // 5. SMOOTH GAIN ENVELOPE (Gentle curve without sudden pops)
     const gainNode = ctx.createGain();
-    gainNode.gain.setValueAtTime(0.001, ctx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(volume * 0.7, ctx.currentTime + 0.02);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.17);
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.linearRampToValueAtTime(volume * 0.8, now + 0.025);
+    gainNode.gain.exponentialRampToValueAtTime(volume * 0.35, now + 0.09);
+    gainNode.gain.exponentialRampToValueAtTime(0.00001, now + duration);
 
-    // Connect node graph
-    noiseNode.connect(filter);
-    filter.connect(highpass);
-    highpass.connect(gainNode);
+    // 6. CONNECT GRAPH
+    noiseSource.connect(bandpass);
+    bandpass.connect(highpass);
+    highpass.connect(lowpass);
+    lowpass.connect(gainNode);
     gainNode.connect(ctx.destination);
 
-    noiseNode.start(ctx.currentTime);
-    noiseNode.stop(ctx.currentTime + 0.18);
+    noiseSource.start(now);
+    noiseSource.stop(now + duration + 0.02);
   } catch (err) {
     console.warn('Page flip audio error:', err);
   }

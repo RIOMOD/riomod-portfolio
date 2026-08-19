@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePortfolioData } from '../context/DataContext';
 import { playPageFlipSound } from '../utils/audioUtils';
 import { 
   ChevronLeft, ChevronRight, BookOpen, X, Sparkles, 
   Award, Calendar, ExternalLink, ArrowRight, Volume2, VolumeX,
-  Sliders, Sun, Moon
+  Sliders, Sun, Moon, ChevronDown, Check, Box, Layers, Zap, Flame
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -17,18 +17,63 @@ export default function BrochureView({ onClose }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   
   // Local settings with defaults from DataContext / Admin
   const [currentEffect, setCurrentEffect] = useState(bookletSettings?.flipEffect || 'classic');
   const [isSoundOn, setIsSoundOn] = useState(bookletSettings?.soundEnabled !== false);
 
   const flipEffectsList = [
-    { id: 'classic', label: '📖 Lật Sách Cổ Điển (Classic 3D)' },
-    { id: 'cube', label: '🎲 Khối Hộp 3D (3D Cube Orbit)' },
-    { id: 'curl', label: '📄 Uốn Nếp Giấy (Paper Wave Fold)' },
-    { id: 'slide', label: '🌠 Trượt Không Gian (Depth Slide)' },
-    { id: 'zoom-flip', label: '🚀 Phóng Thu 3D (Zoom Flip)' }
+    { 
+      id: 'classic', 
+      label: 'Lật Sách Cổ Điển', 
+      badge: 'Classic 3D',
+      desc: 'Xoay quanh trục gáy sách với độ sâu và đổ bóng mờ',
+      icon: '📖'
+    },
+    { 
+      id: 'cube', 
+      label: 'Khối Hộp 3D', 
+      badge: '3D Cube Orbit',
+      desc: 'Xoay lật 90° không gian lập thể góc nhìn tương lai',
+      icon: '🎲'
+    },
+    { 
+      id: 'curl', 
+      label: 'Uốn Nếp Giấy', 
+      badge: 'Paper Wave Fold',
+      desc: 'Mô phỏng nếp gấp uốn lượn sóng mềm mại của giấy',
+      icon: '📄'
+    },
+    { 
+      id: 'slide', 
+      label: 'Trượt Không Gian', 
+      badge: 'Depth Slide',
+      desc: 'Trượt ngang kết hợp tỷ lệ thu phóng chiều sâu ấn tượng',
+      icon: '🌠'
+    },
+    { 
+      id: 'zoom-flip', 
+      label: 'Phóng Thu 3D', 
+      badge: 'Zoom Flip',
+      desc: 'Phóng to thu nhỏ xoay nghiêng phong cách Futuristic',
+      icon: '🚀'
+    }
   ];
+
+  const currentEffectObj = flipEffectsList.find(e => e.id === currentEffect) || flipEffectsList[0];
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Dynamic Theme Colors for Booklet
   const isLight = theme === 'light';
@@ -608,7 +653,7 @@ export default function BrochureView({ onClose }) {
     }}>
       
       {/* Top Header Bar with Live Controls */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1600px', margin: '0 auto', padding: '0 0.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1600px', margin: '0 auto', padding: '0 0.5rem', flexWrap: 'wrap', gap: '0.75rem', position: 'relative', zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: isLight ? 'rgba(2,132,199,0.1)' : 'rgba(0,240,255,0.12)', border: '1px solid var(--accent-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <BookOpen size={20} color="var(--accent-cyan)" />
@@ -623,7 +668,7 @@ export default function BrochureView({ onClose }) {
           </div>
         </div>
 
-        {/* Live Controls: Theme Switcher, Effect Selector & Sound Toggle */}
+        {/* Live Controls: Theme Switcher, Custom Effect Selector & Sound Toggle */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
           
           {/* In-Booklet Theme Switcher */}
@@ -637,43 +682,142 @@ export default function BrochureView({ onClose }) {
             {isLight ? (
               <>
                 <Moon size={15} color="var(--accent-purple)" />
-                <span style={{ fontSize: '0.72rem' }}>Chế độ Tối</span>
+                <span style={{ fontSize: '0.72rem' }}>Tối (Dark)</span>
               </>
             ) : (
               <>
                 <Sun size={15} color="var(--accent-gold)" />
-                <span style={{ fontSize: '0.72rem' }}>Chế độ Sáng</span>
+                <span style={{ fontSize: '0.72rem' }}>Sáng (Light)</span>
               </>
             )}
           </button>
 
-          {/* Flip Effect Selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: itemBg, padding: '0.3rem 0.6rem', borderRadius: '6px', border: '1px solid var(--surface-border)' }}>
-            <Sliders size={14} color="var(--accent-cyan)" />
-            <select
-              value={currentEffect}
-              onChange={(e) => {
-                const eff = e.target.value;
-                setCurrentEffect(eff);
-                updateBookletSettings({ flipEffect: eff });
-              }}
+          {/* Custom Glassmorphism 3D Flip Effect Dropdown */}
+          <div ref={dropdownRef} style={{ position: 'relative' }}>
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="btn-editorial"
               style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--text-primary)',
-                fontSize: '0.78rem',
-                fontFamily: 'var(--font-heading)',
-                outline: 'none',
-                cursor: 'pointer'
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.45rem 0.85rem',
+                fontSize: '0.8rem',
+                borderRadius: '8px',
+                background: isLight ? '#ffffff' : 'rgba(20, 24, 34, 0.85)',
+                border: '1px solid',
+                borderColor: isDropdownOpen ? 'var(--accent-cyan)' : 'var(--surface-border)',
+                boxShadow: isDropdownOpen ? '0 0 15px rgba(0,240,255,0.2)' : 'none',
+                transition: 'all 0.25s ease'
               }}
-              title="Chọn hiệu ứng lật 3D"
+              title="Chọn hiệu ứng lật trang 3D"
             >
-              {flipEffectsList.map((item) => (
-                <option key={item.id} value={item.id} style={{ background: isLight ? '#ffffff' : '#12141a', color: isLight ? '#0f172a' : '#fff' }}>
-                  {item.label}
-                </option>
-              ))}
-            </select>
+              <span style={{ fontSize: '1rem', lineHeight: 1 }}>{currentEffectObj.icon}</span>
+              <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{currentEffectObj.label}</span>
+              <span style={{ fontSize: '0.68rem', color: 'var(--accent-cyan)', background: isLight ? 'rgba(2,132,199,0.1)' : 'rgba(0,240,255,0.1)', padding: '0.1rem 0.4rem', borderRadius: '3px', fontWeight: 600 }}>
+                {currentEffectObj.badge}
+              </span>
+              <ChevronDown 
+                size={15} 
+                color="var(--text-dim)" 
+                style={{ 
+                  transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+                }} 
+              />
+            </button>
+
+            {/* Dropdown Floating Panel */}
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    right: 0,
+                    width: '320px',
+                    background: isLight ? '#ffffff' : 'rgba(15, 18, 26, 0.96)',
+                    backdropFilter: 'blur(24px)',
+                    border: '1px solid var(--surface-border-strong)',
+                    borderRadius: '10px',
+                    boxShadow: isLight ? '0 20px 50px rgba(0,0,0,0.18)' : '0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(0,240,255,0.1)',
+                    padding: '0.5rem',
+                    zIndex: 1000,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.35rem'
+                  }}
+                >
+                  <div style={{ padding: '0.4rem 0.6rem 0.25rem', borderBottom: '1px solid var(--surface-border)', marginBottom: '0.25rem' }}>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>
+                      CHỌN HIỆU ỨNG LẬT TRANG 3D
+                    </span>
+                  </div>
+
+                  {flipEffectsList.map((item) => {
+                    const isSelected = currentEffect === item.id;
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => {
+                          setCurrentEffect(item.id);
+                          updateBookletSettings({ flipEffect: item.id });
+                          setIsDropdownOpen(false);
+                          playPageFlipSound(isSoundOn);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '0.65rem 0.75rem',
+                          borderRadius: '6px',
+                          background: isSelected 
+                            ? (isLight ? 'rgba(2,132,199,0.1)' : 'rgba(0,240,255,0.12)') 
+                            : 'transparent',
+                          border: '1px solid',
+                          borderColor: isSelected ? 'var(--accent-cyan)' : 'transparent',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.05)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = 'transparent';
+                          }
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                          <span style={{ fontSize: '1.25rem', lineHeight: 1 }}>{item.icon}</span>
+                          <div>
+                            <div style={{ fontSize: '0.85rem', color: isSelected ? 'var(--accent-cyan)' : 'var(--text-primary)', fontWeight: 600 }}>
+                              {item.label}
+                            </div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '0.1rem', lineHeight: 1.3 }}>
+                              {item.desc}
+                            </div>
+                          </div>
+                        </div>
+
+                        {isSelected && (
+                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000', flexShrink: 0, marginLeft: '0.5rem' }}>
+                            <Check size={12} strokeWidth={3.5} />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Sound Toggle (Mute/Unmute) */}
