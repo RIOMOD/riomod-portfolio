@@ -5,6 +5,7 @@ import TabProjects from './TabProjects';
 import TabEvents from './TabEvents';
 import TabSkillsTimeline from './TabSkillsTimeline';
 import TabCertificates from './TabCertificates';
+import TabSettings from './TabSettings';
 import TabBackup from './TabBackup';
 import { 
   ShieldCheck, 
@@ -17,6 +18,7 @@ import {
   Database, 
   Lock, 
   LogOut,
+  Sliders,
   CheckCircle2
 } from 'lucide-react';
 import '../../styles/admin.css';
@@ -151,7 +153,7 @@ export default function AdminModal() {
                 className={`admin-tab-btn ${activeTab === 'events' ? 'active' : ''}`}
                 onClick={() => setActiveTab('events')}
               >
-                <Sparkles size={18} /> Sự Kiện & Truyền Thông
+                <Sparkles size={18} /> Sự Kiện & Media
               </button>
 
               <button
@@ -172,6 +174,14 @@ export default function AdminModal() {
 
               <button
                 type="button"
+                className={`admin-tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
+                onClick={() => setActiveTab('settings')}
+              >
+                <Sliders size={18} /> Cài Đặt Hiệu Ứng Sách
+              </button>
+
+              <button
+                type="button"
                 className={`admin-tab-btn ${activeTab === 'backup' ? 'active' : ''}`}
                 onClick={() => setActiveTab('backup')}
               >
@@ -186,6 +196,7 @@ export default function AdminModal() {
               {activeTab === 'events' && <TabEvents />}
               {activeTab === 'skills' && <TabSkillsTimeline />}
               {activeTab === 'certificates' && <TabCertificates />}
+              {activeTab === 'settings' && <TabSettings />}
               {activeTab === 'backup' && <TabBackup />}
             </div>
           </div>

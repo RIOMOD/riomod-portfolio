@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolioData } from '../context/DataContext';
+import { playPageFlipSound } from '../utils/audioUtils';
 import { 
   ChevronLeft, ChevronRight, BookOpen, X, Sparkles, 
-  Award, Calendar, ExternalLink, ArrowRight, MapPin, Mail, Phone, Cpu, Tag
+  Award, Calendar, ExternalLink, ArrowRight, Volume2, VolumeX,
+  Layers, Sliders, Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BrochureView({ onClose }) {
-  const { profile, skills, timeline, projects, events, certificates } = usePortfolioData();
+  const { profile, skills, timeline, projects, events, certificates, bookletSettings, updateBookletSettings } = usePortfolioData();
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
-  const [mobileActiveSubPage, setMobileActiveSubPage] = useState('left'); // 'left' | 'right' for mobile
+  
+  // Local settings with defaults from DataContext / Admin
+  const [currentEffect, setCurrentEffect] = useState(bookletSettings?.flipEffect || 'classic');
+  const [isSoundOn, setIsSoundOn] = useState(bookletSettings?.soundEnabled !== false);
 
-  // Spreads Definition (Enhanced for Full-Width Immersive Experience)
+  const flipEffectsList = [
+    { id: 'classic', label: '📖 Lật Sách Cổ Điển (Classic 3D)' },
+    { id: 'cube', label: '🎲 Khối Hộp 3D (3D Cube Orbit)' },
+    { id: 'curl', label: '📄 Uốn Nếp Giấy (Paper Wave Fold)' },
+    { id: 'slide', label: '🌠 Trượt Không Gian (Depth Slide)' },
+    { id: 'zoom-flip', label: '🚀 Phóng Thu 3D (Zoom Flip)' }
+  ];
+
+  // Spreads Definition
   const spreads = [
     // SPREAD 1: COVER & TABLE OF CONTENTS
     {
@@ -279,7 +292,7 @@ export default function BrochureView({ onClose }) {
       )
     },
 
-    // SPREAD 4: EVENTS & CERTIFICATES (Curated & Spacious)
+    // SPREAD 4: EVENTS & CERTIFICATES
     {
       id: 'spread-4',
       title: 'SỰ KIỆN & VĂN BẰNG CHỨNG CHỈ',
@@ -412,6 +425,10 @@ export default function BrochureView({ onClose }) {
     if (newIndex === currentPage || isFlipping) return;
     setDirection(newIndex > currentPage ? 1 : -1);
     setIsFlipping(true);
+    
+    // Play realistic paper page-flip sound
+    playPageFlipSound(isSoundOn);
+
     setCurrentPage(newIndex);
     setTimeout(() => setIsFlipping(false), 550);
   };
@@ -437,37 +454,138 @@ export default function BrochureView({ onClose }) {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentPage, isFlipping]);
+  }, [currentPage, isFlipping, isSoundOn]);
 
-  // Framer motion variants for rich 3D page flip effect
-  const bookVariants = {
-    enter: (dir) => ({
-      rotateY: dir > 0 ? 35 : -35,
-      opacity: 0,
-      scale: 0.94,
-      filter: 'blur(2px)'
-    }),
-    center: {
-      rotateY: 0,
-      opacity: 1,
-      scale: 1,
-      filter: 'blur(0px)',
-      transition: {
-        duration: 0.55,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    },
-    exit: (dir) => ({
-      rotateY: dir > 0 ? -35 : 35,
-      opacity: 0,
-      scale: 0.94,
-      filter: 'blur(2px)',
-      transition: {
-        duration: 0.45,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    })
+  // Multiple 3D flip animation variants dictionary
+  const getAnimationVariants = (effectName) => {
+    switch (effectName) {
+      case 'cube':
+        return {
+          enter: (dir) => ({
+            rotateY: dir > 0 ? 80 : -80,
+            x: dir > 0 ? '40%' : '-40%',
+            opacity: 0,
+            scale: 0.85
+          }),
+          center: {
+            rotateY: 0,
+            x: '0%',
+            opacity: 1,
+            scale: 1,
+            transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] }
+          },
+          exit: (dir) => ({
+            rotateY: dir > 0 ? -80 : 80,
+            x: dir > 0 ? '-40%' : '40%',
+            opacity: 0,
+            scale: 0.85,
+            transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+          })
+        };
+
+      case 'curl':
+        return {
+          enter: (dir) => ({
+            rotateY: dir > 0 ? 45 : -45,
+            rotateX: 10,
+            opacity: 0,
+            scale: 0.92,
+            skewY: dir > 0 ? 4 : -4
+          }),
+          center: {
+            rotateY: 0,
+            rotateX: 0,
+            opacity: 1,
+            scale: 1,
+            skewY: 0,
+            transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+          },
+          exit: (dir) => ({
+            rotateY: dir > 0 ? -45 : 45,
+            rotateX: -10,
+            opacity: 0,
+            scale: 0.92,
+            skewY: dir > 0 ? -4 : 4,
+            transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
+          })
+        };
+
+      case 'slide':
+        return {
+          enter: (dir) => ({
+            x: dir > 0 ? '60%' : '-60%',
+            rotateY: dir > 0 ? 25 : -25,
+            opacity: 0,
+            scale: 0.9
+          }),
+          center: {
+            x: '0%',
+            rotateY: 0,
+            opacity: 1,
+            scale: 1,
+            transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+          },
+          exit: (dir) => ({
+            x: dir > 0 ? '-60%' : '60%',
+            rotateY: dir > 0 ? -25 : 25,
+            opacity: 0,
+            scale: 0.9,
+            transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
+          })
+        };
+
+      case 'zoom-flip':
+        return {
+          enter: (dir) => ({
+            scale: 0.6,
+            rotateY: dir > 0 ? 60 : -60,
+            rotateX: -12,
+            opacity: 0
+          }),
+          center: {
+            scale: 1,
+            rotateY: 0,
+            rotateX: 0,
+            opacity: 1,
+            transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+          },
+          exit: (dir) => ({
+            scale: 0.6,
+            rotateY: dir > 0 ? -60 : 60,
+            rotateX: 12,
+            opacity: 0,
+            transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+          })
+        };
+
+      case 'classic':
+      default:
+        return {
+          enter: (dir) => ({
+            rotateY: dir > 0 ? 35 : -35,
+            opacity: 0,
+            scale: 0.94,
+            filter: 'blur(1px)'
+          }),
+          center: {
+            rotateY: 0,
+            opacity: 1,
+            scale: 1,
+            filter: 'blur(0px)',
+            transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] }
+          },
+          exit: (dir) => ({
+            rotateY: dir > 0 ? -35 : 35,
+            opacity: 0,
+            scale: 0.94,
+            filter: 'blur(1px)',
+            transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+          })
+        };
+    }
   };
+
+  const selectedVariants = getAnimationVariants(currentEffect);
 
   return (
     <div style={{
@@ -480,21 +598,21 @@ export default function BrochureView({ onClose }) {
       flexDirection: 'column',
       justifyContent: 'space-between',
       padding: 'clamp(0.5rem, 1.5vw, 1.25rem)',
-      perspective: '2400px',
+      perspective: '2600px',
       overflow: 'hidden',
       width: '100vw',
       height: '100vh'
     }}>
       
-      {/* Top Header Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1600px', margin: '0 auto', padding: '0 0.5rem' }}>
+      {/* Top Header Bar with Live Controls */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1600px', margin: '0 auto', padding: '0 0.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(0,240,255,0.12)', border: '1px solid rgba(0,240,255,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <BookOpen size={20} color="var(--accent-cyan)" />
           </div>
           <div>
             <span className="font-display" style={{ fontSize: 'clamp(0.95rem, 2vw, 1.2rem)', color: '#ffffff', letterSpacing: '0.08em' }}>
-              3D EDITORIAL BOOKLET MODE
+              3D EDITORIAL BOOKLET
             </span>
             <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', display: 'block' }}>
               {spreads[currentPage].title}
@@ -502,14 +620,74 @@ export default function BrochureView({ onClose }) {
           </div>
         </div>
 
-        <button 
-          type="button"
-          onClick={onClose}
-          className="btn-secondary"
-          style={{ padding: '0.5rem 1rem', fontSize: '0.82rem', borderRadius: '6px' }}
-        >
-          <X size={16} /> Thoát Chế Độ Lật Sách [ESC]
-        </button>
+        {/* Live Controls: Effect Selector & Sound Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          
+          {/* Flip Effect Selector */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.06)', padding: '0.3rem 0.6rem', borderRadius: '6px', border: '1px solid var(--surface-border)' }}>
+            <Sliders size={14} color="var(--accent-cyan)" />
+            <select
+              value={currentEffect}
+              onChange={(e) => {
+                const eff = e.target.value;
+                setCurrentEffect(eff);
+                updateBookletSettings({ flipEffect: eff });
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#ffffff',
+                fontSize: '0.78rem',
+                fontFamily: 'var(--font-heading)',
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+              title="Chọn hiệu ứng lật 3D"
+            >
+              {flipEffectsList.map((item) => (
+                <option key={item.id} value={item.id} style={{ background: '#12141a', color: '#fff' }}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Sound Toggle (Mute/Unmute) */}
+          <button
+            type="button"
+            onClick={() => {
+              const nextSound = !isSoundOn;
+              setIsSoundOn(nextSound);
+              updateBookletSettings({ soundEnabled: nextSound });
+              if (nextSound) playPageFlipSound(true);
+            }}
+            className="btn-editorial"
+            style={{ padding: '0.45rem 0.75rem', fontSize: '0.78rem', gap: '0.4rem' }}
+            title={isSoundOn ? 'Tắt âm thanh lật trang' : 'Bật âm thanh lật trang'}
+          >
+            {isSoundOn ? (
+              <>
+                <Volume2 size={16} color="var(--accent-cyan)" />
+                <span style={{ fontSize: '0.72rem' }}>Âm Thanh: Bật</span>
+              </>
+            ) : (
+              <>
+                <VolumeX size={16} color="var(--text-dim)" />
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>Âm Thanh: Tắt</span>
+              </>
+            )}
+          </button>
+
+          {/* Close Button */}
+          <button 
+            type="button"
+            onClick={onClose}
+            className="btn-secondary"
+            style={{ padding: '0.45rem 0.9rem', fontSize: '0.82rem', borderRadius: '6px' }}
+          >
+            <X size={16} /> Thoát [ESC]
+          </button>
+        </div>
       </div>
 
       {/* 3D FULL-WIDTH BOOKLET STAGE */}
@@ -518,7 +696,7 @@ export default function BrochureView({ onClose }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        perspective: '2400px',
+        perspective: '2600px',
         width: '100%',
         maxWidth: '1600px',
         margin: '0.5rem auto'
@@ -527,7 +705,7 @@ export default function BrochureView({ onClose }) {
           <motion.div
             key={spreads[currentPage].id}
             custom={direction}
-            variants={bookVariants}
+            variants={selectedVariants}
             initial="enter"
             animate="center"
             exit="exit"

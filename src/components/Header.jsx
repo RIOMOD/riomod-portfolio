@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { usePortfolioData } from '../context/DataContext';
-import { BookOpen, ShieldCheck, Menu, X, Terminal, Sparkles, User, Award, Mail, Clock } from 'lucide-react';
+import { BookOpen, ShieldCheck, Menu, X, Terminal, Sparkles, User, Award, Mail, Clock, Sun, Moon } from 'lucide-react';
 
 export default function Header({ onOpenMagazine }) {
-  const { profile, setIsAdminOpen } = usePortfolioData();
+  const { profile, setIsAdminOpen, theme, toggleTheme } = usePortfolioData();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
@@ -14,10 +14,10 @@ export default function Header({ onOpenMagazine }) {
         {/* Brand / Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <a href="#hero" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span className="font-display" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)', color: '#fff', letterSpacing: '0.1em' }}>
+            <span className="font-display" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)', color: 'var(--text-primary)', letterSpacing: '0.1em' }}>
               {profile.name ? profile.name.toUpperCase() : 'NGUYỄN CÔNG TRỨ'}
             </span>
-            <span style={{ fontSize: '0.65rem', color: 'var(--accent-cyan)', border: '1px solid rgba(0,240,255,0.3)', padding: '0.1rem 0.4rem', borderRadius: '3px', whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: '0.65rem', color: 'var(--accent-cyan)', border: '1px solid var(--accent-cyan)', padding: '0.1rem 0.4rem', borderRadius: '3px', whiteSpace: 'nowrap' }}>
               3D PORTFOLIO
             </span>
           </a>
@@ -31,6 +31,26 @@ export default function Header({ onOpenMagazine }) {
           <a href="#events" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.82rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>SỰ KIỆN</a>
           <a href="#certificates" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.82rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>BẰNG CẤP</a>
           <a href="#contact" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.82rem', fontFamily: 'var(--font-heading)', letterSpacing: '0.05em' }}>LIÊN HỆ</a>
+
+          {/* Theme Toggle Button (Light / Dark) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="btn-editorial"
+            style={{ padding: '0.4rem 0.75rem', borderRadius: '20px', fontSize: '0.78rem' }}
+            title={theme === 'dark' ? 'Chuyển sang Chế độ Sáng (Light Mode)' : 'Chuyển sang Chế độ Tối (Dark Mode)'}
+            aria-label="Toggle Dark/Light Mode"
+          >
+            {theme === 'dark' ? (
+              <>
+                <Sun size={15} color="#ffb703" /> <span style={{ fontSize: '0.75rem' }}>Light</span>
+              </>
+            ) : (
+              <>
+                <Moon size={15} color="#7c3aed" /> <span style={{ fontSize: '0.75rem' }}>Dark</span>
+              </>
+            )}
+          </button>
           
           <button 
             type="button"
@@ -52,15 +72,28 @@ export default function Header({ onOpenMagazine }) {
           </button>
         </nav>
 
-        {/* Mobile Menu Toggle Button */}
-        <button
-          type="button"
-          className="mobile-menu-btn"
-          onClick={() => setMobileMenuOpen(true)}
-          aria-label="Open Navigation Menu"
-        >
-          <Menu size={22} />
-        </button>
+        {/* Mobile Action Controls */}
+        <div style={{ display: 'none', alignItems: 'center', gap: '0.5rem' }} className="mobile-controls-wrap">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="btn-editorial"
+            style={{ padding: '0.4rem', borderRadius: '50%' }}
+            title="Đổi giao diện sáng/tối"
+          >
+            {theme === 'dark' ? <Sun size={18} color="#ffb703" /> : <Moon size={18} color="#7c3aed" />}
+          </button>
+
+          <button
+            type="button"
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Open Navigation Menu"
+            style={{ display: 'flex' }}
+          >
+            <Menu size={22} color="var(--text-primary)" />
+          </button>
+        </div>
       </header>
 
       {/* Mobile Backdrop */}
@@ -72,8 +105,8 @@ export default function Header({ onOpenMagazine }) {
       {/* Mobile Drawer Navigation */}
       <aside className={`mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}>
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem' }}>
-            <span className="font-display" style={{ fontSize: '1.1rem', color: '#fff' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '1px solid var(--surface-border)', paddingBottom: '1rem' }}>
+            <span className="font-display" style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>
               MENU ĐIỀU HƯỚNG
             </span>
             <button
@@ -108,7 +141,25 @@ export default function Header({ onOpenMagazine }) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', borderTop: '1px solid var(--surface-border)', paddingTop: '1.5rem' }}>
+          {/* Mobile Theme Toggle Button */}
+          <button
+            type="button"
+            className="btn-editorial"
+            onClick={toggleTheme}
+            style={{ width: '100%', justifyContent: 'center', gap: '0.5rem' }}
+          >
+            {theme === 'dark' ? (
+              <>
+                <Sun size={16} color="#ffb703" /> Chuyển Sang Giao Diện Sáng (Light)
+              </>
+            ) : (
+              <>
+                <Moon size={16} color="#7c3aed" /> Chuyển Sang Giao Diện Tối (Dark)
+              </>
+            )}
+          </button>
+
           <button 
             type="button"
             className="btn-editorial btn-accent" 

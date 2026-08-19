@@ -3,7 +3,15 @@ import { portfolioData as initialData } from '../data/portfolioData';
 
 const LOCAL_STORAGE_KEY = 'portfolio_custom_data_v1';
 const ADMIN_PIN_KEY = 'portfolio_admin_pin_v1';
+const THEME_KEY = 'portfolio_theme_mode_v1';
+const BOOKLET_SETTINGS_KEY = 'portfolio_booklet_settings_v1';
 const DEFAULT_PIN = '2026';
+
+const defaultBookletSettings = {
+  flipEffect: 'classic', // 'classic' | 'cube' | 'curl' | 'slide' | 'zoom-flip'
+  soundEnabled: true,
+  flipSpeed: 'normal' // 'fast' | 'normal' | 'cinematic'
+};
 
 const DataContext = createContext(null);
 
@@ -20,6 +28,24 @@ export function DataProvider({ children }) {
     return initialData;
   });
 
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem(THEME_KEY) || 'dark';
+    } catch (e) {
+      return 'dark';
+    }
+  });
+
+  const [bookletSettings, setBookletSettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem(BOOKLET_SETTINGS_KEY);
+      if (saved) return { ...defaultBookletSettings, ...JSON.parse(saved) };
+    } catch (e) {
+      console.error('Error loading booklet settings:', e);
+    }
+    return defaultBookletSettings;
+  });
+
   const [adminPin, setAdminPin] = useState(() => {
     try {
       return localStorage.getItem(ADMIN_PIN_KEY) || DEFAULT_PIN;
@@ -32,7 +58,7 @@ export function DataProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
-  // Sync to localStorage whenever data changes
+  // Sync data to localStorage
   useEffect(() => {
     try {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
@@ -41,12 +67,45 @@ export function DataProvider({ children }) {
     }
   }, [data]);
 
+  // Sync Theme to HTML and localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+      if (theme === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.body.classList.add('theme-light');
+      } else {
+        document.documentElement.classList.remove('theme-light');
+        document.body.classList.remove('theme-light');
+      }
+    } catch (e) {
+      console.error('Error setting theme:', e);
+    }
+  }, [theme]);
+
+  // Sync Booklet Settings
+  useEffect(() => {
+    try {
+      localStorage.setItem(BOOKLET_SETTINGS_KEY, JSON.stringify(bookletSettings));
+    } catch (e) {
+      console.error('Error saving booklet settings:', e);
+    }
+  }, [bookletSettings]);
+
   // Toast notification helper
   const showToast = (message, type = 'success') => {
     setToastMessage({ message, type, id: Date.now() });
     setTimeout(() => {
       setToastMessage(null);
     }, 3500);
+  };
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const nextTheme = prev === 'dark' ? 'light' : 'dark';
+      showToast(`Đã chuyển sang chế độ ${nextTheme === 'light' ? 'Sáng (Light Mode)' : 'Tối (Dark Mode)'}!`, 'info');
+      return nextTheme;
+    });
   };
 
   // Auth verify
@@ -167,6 +226,12 @@ export function DataProvider({ children }) {
     showToast('Đã cập nhật danh sách chứng chỉ!');
   };
 
+  // Update Booklet Settings
+  const updateBookletSettings = (newSettings) => {
+    setBookletSettings((prev) => ({ ...prev, ...newSettings }));
+    showToast('Đã lưu cấu hình hiệu ứng lật sách 3D!');
+  };
+
   // Import / Export / Reset
   const exportJSON = () => {
     const jsonStr = JSON.stringify(data, null, 2);
@@ -199,7 +264,11 @@ export function DataProvider({ children }) {
 
   const resetToDefault = () => {
     setData(initialData);
+    setTheme('dark');
+    setBookletSettings(defaultBookletSettings);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
+    localStorage.removeItem(THEME_KEY);
+    localStorage.removeItem(BOOKLET_SETTINGS_KEY);
     showToast('Đã khôi phục dữ liệu gốc ban đầu!', 'info');
   };
 
@@ -217,6 +286,14 @@ export function DataProvider({ children }) {
         eventCategories: data.eventCategories || [],
         certCategories: data.certCategories || [],
         
+        // Theme
+        theme,
+        toggleTheme,
+
+        // Booklet Settings
+        bookletSettings,
+        updateBookletSettings,
+
         // Admin state
         isAdminOpen,
         setIsAdminOpen,
