@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { usePortfolioData } from '../../context/DataContext';
-import { Download, Upload, RotateCcw, Lock, KeyRound, AlertTriangle, FileCode } from 'lucide-react';
+import { Download, Upload, RotateCcw, Lock, KeyRound, AlertTriangle, FileCode, Cloud } from 'lucide-react';
 
 export default function TabBackup() {
-  const { data, exportJSON, importJSON, resetToDefault, changePin } = usePortfolioData();
+  const { data, exportJSON, importJSON, resetToDefault, changePin, cloudSyncStatus, syncToCloud } = usePortfolioData();
   const [jsonText, setJsonText] = useState('');
   const [newPin, setNewPin] = useState('');
 
@@ -57,6 +57,34 @@ export default function TabBackup() {
         <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
           Xuất dữ liệu dự phòng ra file JSON, nhập dữ liệu từ file hoặc khôi phục về mặc định ban đầu
         </span>
+      </div>
+
+      {/* Neon Cloud Database Sync Section */}
+      <div style={{ background: 'linear-gradient(135deg, rgba(6, 214, 160, 0.08) 0%, rgba(18, 21, 29, 0.7) 100%)', border: '1px solid rgba(6, 214, 160, 0.25)', borderRadius: '8px', padding: '1.5rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <h4 style={{ fontSize: '1.05rem', color: '#06d6a0', fontFamily: 'var(--font-heading)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Cloud size={18} /> Đồng Bộ Cơ Sở Dữ Liệu Neon.tech (PostgreSQL)
+          </h4>
+          <span style={{
+            fontSize: '0.75rem',
+            padding: '0.2rem 0.6rem',
+            borderRadius: '20px',
+            fontWeight: 600,
+            background: cloudSyncStatus === 'synced' ? 'rgba(6, 214, 160, 0.15)' : 'rgba(255, 255, 255, 0.08)',
+            color: cloudSyncStatus === 'synced' ? '#06d6a0' : 'var(--text-dim)',
+            border: cloudSyncStatus === 'synced' ? '1px solid rgba(6, 214, 160, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            {cloudSyncStatus === 'synced' ? '🟢 Đã kết nối Neon Cloud' : cloudSyncStatus === 'saving' ? '⏳ Đang lưu Cloud...' : '💾 Chế độ LocalStorage'}
+          </span>
+        </div>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
+          Khi triển khai Backend lên <strong>Render.com</strong> với biến môi trường <code>DATABASE_URL</code> của <strong>Neon.tech</strong>, mọi thay đổi về hồ sơ, dự án, bố cục và widgets sẽ được tự động lưu vĩnh viễn vào đám mây PostgreSQL!
+        </p>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button type="button" onClick={syncToCloud} className="btn-primary" style={{ background: '#06d6a0', color: '#0b0d13', fontWeight: 600 }}>
+            <Cloud size={16} /> Đồng Bộ Dữ Liệu Lên Neon Cloud Ngay
+          </button>
+        </div>
       </div>
 
       {/* Export / Download Section */}

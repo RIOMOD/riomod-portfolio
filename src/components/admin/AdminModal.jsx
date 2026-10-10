@@ -5,6 +5,7 @@ import TabProjects from './TabProjects';
 import TabEvents from './TabEvents';
 import TabSkillsTimeline from './TabSkillsTimeline';
 import TabCertificates from './TabCertificates';
+import TabWidgetsLayout from './TabWidgetsLayout';
 import TabSettings from './TabSettings';
 import TabBackup from './TabBackup';
 import { 
@@ -19,7 +20,8 @@ import {
   Lock, 
   LogOut,
   Sliders,
-  CheckCircle2
+  CheckCircle2,
+  LayoutGrid
 } from 'lucide-react';
 import '../../styles/admin.css';
 
@@ -142,6 +144,14 @@ export default function AdminModal() {
 
               <button
                 type="button"
+                className={`admin-tab-btn ${activeTab === 'layout' ? 'active' : ''}`}
+                onClick={() => setActiveTab('layout')}
+              >
+                <LayoutGrid size={18} color="#06d6a0" /> Bố Cục & Widgets
+              </button>
+
+              <button
+                type="button"
                 className={`admin-tab-btn ${activeTab === 'projects' ? 'active' : ''}`}
                 onClick={() => setActiveTab('projects')}
               >
@@ -185,13 +195,14 @@ export default function AdminModal() {
                 className={`admin-tab-btn ${activeTab === 'backup' ? 'active' : ''}`}
                 onClick={() => setActiveTab('backup')}
               >
-                <Database size={18} /> Sao Lưu & JSON
+                <Database size={18} /> Sao Lưu & Cloud
               </button>
             </div>
 
             {/* Main Tab Content */}
             <div className="admin-content">
               {activeTab === 'profile' && <TabProfile />}
+              {activeTab === 'layout' && <TabWidgetsLayout />}
               {activeTab === 'projects' && <TabProjects />}
               {activeTab === 'events' && <TabEvents />}
               {activeTab === 'skills' && <TabSkillsTimeline />}

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: riomod-portfolio
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false # Paste your Neon.tech PostgreSQL connection string here
+      - key: ADMIN_PIN
+        value: 2026
