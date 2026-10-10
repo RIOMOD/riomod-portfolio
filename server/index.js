@@ -112,7 +112,7 @@ app.use((req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Portfolio Server running at http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Portfolio Server running on port ${PORT}`);
   console.log(`🌐 Neon.tech Database: ${process.env.DATABASE_URL ? 'Configured' : 'Not configured'}`);
 });

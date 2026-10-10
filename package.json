@@ -9,9 +9,12 @@
     "start": "node server/index.js",
     "server": "node server/index.js",
     "seed": "node server/seed.js",
-    "deploy:firebase": "npm run build && firebase deploy --only hosting",
+    "deploy:firebase": "npm run build && npx firebase deploy --only hosting",
     "lint": "oxlint",
     "preview": "vite preview"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
