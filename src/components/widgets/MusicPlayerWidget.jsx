@@ -1,28 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, SkipForward, SkipBack, Music, Disc } from 'lucide-react';
-
-const TRACKS = [
-  {
-    title: 'Cyberpunk Lo-Fi Chill',
-    artist: 'Antigravity Studio',
-    duration: '3:24',
-    url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3'
-  },
-  {
-    title: 'Midnight Coding Symphony',
-    artist: 'Neon Wave Beats',
-    duration: '2:45',
-    url: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=chill-abstract-intention-12099.mp3'
-  },
-  {
-    title: 'Deep Focus Ambient Flow',
-    artist: 'Synthetic Dawn',
-    duration: '4:10',
-    url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=empty-mind-118973.mp3'
-  }
-];
+import { usePortfolioData } from '../../context/DataContext';
+import { defaultTracks } from '../../data/defaultTracks';
 
 export default function MusicPlayerWidget({ config = {} }) {
+  const { audioTracks } = usePortfolioData();
+  const tracks = (audioTracks && audioTracks.length > 0) ? audioTracks : defaultTracks;
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
@@ -31,7 +15,8 @@ export default function MusicPlayerWidget({ config = {} }) {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
 
-  const currentTrack = TRACKS[currentTrackIndex];
+  const safeIndex = currentTrackIndex < tracks.length ? currentTrackIndex : 0;
+  const currentTrack = tracks[safeIndex] || defaultTracks[0];
 
   useEffect(() => {
     if (audioRef.current) {
@@ -54,7 +39,7 @@ export default function MusicPlayerWidget({ config = {} }) {
   };
 
   const handleNext = () => {
-    const nextIdx = (currentTrackIndex + 1) % TRACKS.length;
+    const nextIdx = (currentTrackIndex + 1) % tracks.length;
     setCurrentTrackIndex(nextIdx);
     setIsPlaying(false);
     setTimeout(() => {
@@ -65,7 +50,7 @@ export default function MusicPlayerWidget({ config = {} }) {
   };
 
   const handlePrev = () => {
-    const prevIdx = (currentTrackIndex - 1 + TRACKS.length) % TRACKS.length;
+    const prevIdx = (currentTrackIndex - 1 + tracks.length) % tracks.length;
     setCurrentTrackIndex(prevIdx);
     setIsPlaying(false);
     setTimeout(() => {
@@ -141,7 +126,7 @@ export default function MusicPlayerWidget({ config = {} }) {
               {currentTrack.title}
             </h3>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              {currentTrack.artist} • Track {currentTrackIndex + 1}/{TRACKS.length}
+              {currentTrack.artist} • Track {safeIndex + 1}/{tracks.length}
             </span>
           </div>
         </div>

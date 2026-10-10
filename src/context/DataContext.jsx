@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { portfolioData as initialData } from '../data/portfolioData';
 import { defaultLayout } from '../data/defaultLayout';
+import { defaultTracks } from '../data/defaultTracks';
 
-export { defaultLayout };
+export { defaultLayout, defaultTracks };
 
 const LOCAL_STORAGE_KEY = 'portfolio_custom_data_v1';
 const LAYOUT_KEY = 'portfolio_layout_v1';
@@ -259,6 +260,32 @@ export function DataProvider({ children }) {
     showToast('Đã xóa dự án thành công!', 'warning');
   };
 
+  const reorderProjects = (fromIndex, toIndex) => {
+    if (toIndex < 0 || toIndex >= (data.projects || []).length) return;
+    setData((prev) => {
+      const copy = [...(prev.projects || [])];
+      const [moved] = copy.splice(fromIndex, 1);
+      copy.splice(toIndex, 0, moved);
+      return { ...prev, projects: copy };
+    });
+    showToast('Đã thay đổi thứ tự dự án!');
+  };
+
+  const deleteAllProjects = () => {
+    setData((prev) => ({ ...prev, projects: [] }));
+    showToast('Đã xóa toàn bộ dự án!', 'warning');
+  };
+
+  const resetProjects = () => {
+    setData((prev) => ({ ...prev, projects: initialData.projects || [] }));
+    showToast('Đã khôi phục danh mục dự án gốc!');
+  };
+
+  const updateAudioTracks = (newTracks) => {
+    setData((prev) => ({ ...prev, audioTracks: newTracks }));
+    showToast('Đã cập nhật danh sách âm thanh!');
+  };
+
   // Events CRUD
   const addEvent = (event) => {
     const newEvent = {
@@ -468,6 +495,11 @@ export function DataProvider({ children }) {
         addProject,
         updateProject,
         deleteProject,
+        reorderProjects,
+        deleteAllProjects,
+        resetProjects,
+        audioTracks: data.audioTracks || defaultTracks,
+        updateAudioTracks,
         addEvent,
         updateEvent,
         deleteEvent,
