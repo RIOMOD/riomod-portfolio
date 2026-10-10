@@ -19,6 +19,7 @@
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
+    "@vitejs/plugin-react": "^6.0.4",
     "canvas-confetti": "^1.9.4",
     "cors": "^2.8.6",
     "dotenv": "^18.0.7",
@@ -28,14 +29,13 @@
     "pg": "^8.23.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "three": "^0.185.1"
+    "three": "^0.185.1",
+    "vite": "^8.2.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
     "firebase-tools": "^15.33.0",
-    "oxlint": "^1.75.0",
-    "vite": "^8.2.0"
+    "oxlint": "^1.75.0"
   }
 }
